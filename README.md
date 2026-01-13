@@ -95,7 +95,6 @@ Each project folder contains:
 - `tech-stack.md` - Detailed technology choices and rationale
 - `features.md` - Key features and implementations
 - `challenges.md` - Technical challenges and solutions
-- `screenshots/` - Visual previews (when applicable)
 
 Pattern documentation includes:
 
