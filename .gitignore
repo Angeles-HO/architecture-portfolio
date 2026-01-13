@@ -1,0 +1,25 @@
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+.cache/
+
+# Don't track if you add actual code examples
+node_modules/
+*.env
+*.env.local
+
+# Keep documentation only
+!*.md
+!*.markdown
