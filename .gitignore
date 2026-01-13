@@ -23,3 +23,6 @@ node_modules/
 # Keep documentation only
 !*.md
 !*.markdown
+
+
+PUBLISH.md
