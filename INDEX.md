@@ -6,11 +6,10 @@ Quick reference to all documentation in this portfolio.
 
 ## 🏠 Main Documentation
 
-| File                             | Description        | Content                                                  |
-| -------------------------------- | ------------------ | -------------------------------------------------------- |
-| [README.md](README.md)           | Main overview      | Portfolio introduction, project list, tech stack summary |
-| [QUICK-START.md](QUICK-START.md) | Navigation guide   | How to use this repository effectively                   |
-| [PUBLISH.md](PUBLISH.md)         | Setup instructions | How to publish this as standalone repo                   |
+| File                             | Description      | Content                                                  |
+| -------------------------------- | ---------------- | -------------------------------------------------------- |
+| [README.md](README.md)           | Main overview    | Portfolio introduction, project list, tech stack summary |
+| [QUICK-START.md](QUICK-START.md) | Navigation guide | How to use this repository effectively                   |
 
 ---
 
@@ -33,7 +32,17 @@ Quick reference to all documentation in this portfolio.
 ### Digital Menu System (QR)
 
 📁 Location: `projects/digital-menu-qr/`  
-🚧 **Status**: To be documented
+🏷️ Focus: Presentation layer modernizing a legacy order system
+
+| Section      | Description                                         |
+| ------------ | --------------------------------------------------- |
+| Architecture | Decoupled QR-driven menu, Redis cache, signed URLs  |
+| Security     | Rate limits, JWT/RBAC for admin, signed QR payloads |
+| Features     | Menu caching, admin CRUD, legacy handoff            |
+| Tech Stack   | Node.js, PostgreSQL, Redis, Nginx, Docker           |
+| Deployment   | Docker Compose with proxy + cache + DB              |
+
+**Read**: [projects/digital-menu-qr/README.md](projects/digital-menu-qr/README.md)
 
 ### Data Sync Pipeline
 
@@ -109,12 +118,12 @@ Quick reference to all documentation in this portfolio.
 
 ## 📊 Content Statistics
 
-| Category           | Files  | Total Lines |
-| ------------------ | ------ | ----------- |
-| Project READMEs    | 1      | ~600        |
-| Technical Patterns | 5      | ~2000       |
-| Setup Guides       | 2      | ~400        |
-| **Total**          | **10** | **~3400**   |
+| Category           | Files | Total Lines |
+| ------------------ | ----- | ----------- |
+| Project READMEs    | 2     | ~1200       |
+| Technical Patterns | 5     | ~2000       |
+| Setup Guides       | 2     | ~400        |
+| **Total**          | **9** | **~3600**   |
 
 ---
 
@@ -156,12 +165,14 @@ Recommended reading order:
 **Node.js**
 
 - [E-commerce Platform](projects/ecommerce-cosmetics/README.md)
+- [Digital Menu (QR)](projects/digital-menu-qr/README.md)
 - [CSRF Middleware](patterns/csrf-implementation.md)
 - [Rate Limiting](patterns/rate-limiting.md)
 
 **PostgreSQL**
 
 - [E-commerce Platform](projects/ecommerce-cosmetics/README.md)
+- [Digital Menu (QR)](projects/digital-menu-qr/README.md)
 - [Database Migrations](patterns/database-migrations.md)
 
 **Redis**
@@ -169,11 +180,13 @@ Recommended reading order:
 - [Session Strategy](patterns/redis-session-strategy.md)
 - [Rate Limiting](patterns/rate-limiting.md)
 - [E-commerce Caching](projects/ecommerce-cosmetics/README.md)
+- [Digital Menu Cache](projects/digital-menu-qr/README.md#menu-fetch-qr-scan)
 
 **Docker**
 
 - [Docker Compose Setup](patterns/docker-compose-setup.md)
 - [E-commerce Deployment](projects/ecommerce-cosmetics/README.md#deployment-architecture)
+- [Digital Menu Deployment](projects/digital-menu-qr/README.md#deployment)
 
 **Security**
 
@@ -223,6 +236,7 @@ Recommended reading order:
 1. [Redis Sessions](patterns/redis-session-strategy.md)
 2. [Docker Multi-Service](patterns/docker-compose-setup.md)
 3. [E-commerce Architecture](projects/ecommerce-cosmetics/README.md)
+4. [Digital Menu Cache Strategy](projects/digital-menu-qr/README.md)
 
 ---
 
@@ -251,12 +265,12 @@ All patterns reference official documentation:
 | README.md           | ✅ Complete | Jan 2026     |
 | QUICK-START.md      | ✅ Complete | Jan 2026     |
 | E-commerce README   | ✅ Complete | Jan 2026     |
+| Digital QR Menu     | ✅ Complete | Jan 2026     |
 | CSRF Implementation | ✅ Complete | Jan 2026     |
 | Redis Sessions      | ✅ Complete | Jan 2026     |
 | Rate Limiting       | ✅ Complete | Jan 2026     |
 | Docker Setup        | ✅ Complete | Jan 2026     |
 | Database Migrations | ✅ Complete | Jan 2026     |
-| Digital QR Menu     | 🚧 Pending  | -            |
 | Data Sync Pipeline  | 🚧 Pending  | -            |
 
 ---
