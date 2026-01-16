@@ -187,7 +187,7 @@ This project uses a deliberate mix: the cookie containing the client token is ac
 
 ---
 
-## 🔐 HttpOnly vs Exponer token en header (patrón seguro)
+## 🔐 HttpOnly vs Expose token in header (safe pattern)
 
 - For maximum protection against XSS, store the identifier token (`tokenId`) in the `HttpOnly` cookie and send the actual token in a response header (`X-CSRF-Token`) only when it is generated. The client reads the header and stores it in memory (not in a cookie) for the next request. This way, even if an XSS attacker reads cookies, they will not be able to obtain the token unless it is written to a cookie.
 
