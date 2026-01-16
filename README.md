@@ -120,6 +120,7 @@ Pattern documentation includes:
 Interested in discussing these architectures or potential collaboration?
 
 - **GitHub**: [@Angeles-HO](https://github.com/Angeles-HO)
+- **Email**: [Angeles-HO](mailto:angelesho@pm.me)
 - **Profile**: [View Full Tech Stack](https://github.com/Angeles-HO)
 
 ---
