@@ -115,9 +115,9 @@ apps/
 │       ├── services/      # API clients
 │       ├── components/    # UI (navbar, menu, footer)
 │       └── styles/        # modular CSS
-└── server/
-    └── app.js       # entry point
-    └── server.mjs   # server configuration
+server/
+  └── app.js       # entry point
+  └── server.mjs   # server configuration
 ```
 
 ---
