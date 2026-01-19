@@ -153,32 +153,6 @@ Every pattern includes:
 
 ---
 
-## 🎯 Use Cases
-
-### **Job Applications**
-
-Include link to this repository in your resume/cover letter:
-
-> "View my architecture portfolio: [github.com/Angeles-HO/architecture-portfolio]"
-
-### **Technical Interviews**
-
-Reference specific patterns when discussing:
-
-- Security implementations → CSRF, Rate Limiting
-- System design → E-commerce architecture
-- DevOps experience → Docker, Migrations
-
-### **Learning & Reference**
-
-Use patterns as templates for your own projects:
-
-- Implementing CSRF protection
-- Setting up Docker environments
-- Designing session strategies
-
----
-
 ## 🔗 Related Resources
 
 - **Main Profile**: [profile.md](https://github.com/Angeles-HO) - Complete tech stack
@@ -189,7 +163,7 @@ Use patterns as templates for your own projects:
 
 ## 📝 Contribution Note
 
-This is a **showcase repository** documenting private work. It is not open for external contributions but demonstrates:
+This is a **showcase repository** documenting private work:
 
 - Documentation skills
 - Communication ability
