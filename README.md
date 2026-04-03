@@ -30,12 +30,19 @@ QR-based digital menu with real-time updates and caching.
 **Tech Stack**: Node.js · PostgreSQL · Docker · Redis  
 **Highlights**: Cache strategy · Data synchronization · Background jobs
 
-### 3. [Data Sync Pipeline](./projects/data-sync-pipeline/)
+### 3. [Telvyn - Local-First Agent Runtime](./projects/telvyn/)
 
-Automated data synchronization system with hash-based diff detection.
+Local-first technical agent runtime with deterministic workspace I/O and session continuity.
 
-**Tech Stack**: Python · JSON · Hash algorithms  
-**Highlights**: Idempotent operations · Snapshot management · Conflict resolution
+**Tech Stack**: Python · CLI/TUI · Local LLM backends  
+**Highlights**: Deterministic workspace contract · Session/Run memory model · Guardrailed execution
+
+### 4. [Kitsunping Network Optimization Stack](./projects/kitsunping-network-stack/)
+
+Android network optimization stack combining on-device profile orchestration and router-side policy protocol.
+
+**Tech Stack**: Bash · Android root ecosystem · Router scripting  
+**Highlights**: Event-driven daemon · QoS policy protocol · RF channel recommendation · Router/client integration boundary
 
 ---
 
@@ -55,7 +62,7 @@ Detailed documentation of reusable patterns and implementations:
 
 ### Backend
 
-- **Languages**: JavaScript/Node.js, TypeScript, Python, Java
+- **Languages**: JavaScript/Node.js, TypeScript, Python, Java, Bash
 - **Frameworks**: Express.js, Sequelize ORM
 - **Databases**: PostgreSQL, Redis, MySQL, MongoDB
 
@@ -72,6 +79,7 @@ Detailed documentation of reusable patterns and implementations:
 - Password hashing (bcrypt, argon2)
 - Request rate limiting
 - Input sanitization & validation
+- Deterministic workspace I/O guardrails
 
 ---
 
@@ -79,22 +87,22 @@ Detailed documentation of reusable patterns and implementations:
 
 All projects follow these core principles:
 
-✅ **Separation of Concerns** - Clear MVC/layered architecture  
-✅ **Security First** - Defense in depth approach  
-✅ **Scalability** - Horizontal scaling ready  
-✅ **Maintainability** - Clean code, documented patterns  
-✅ **Performance** - Caching strategies, optimized queries
+- **Separation of Concerns** - Clear MVC/layered architecture
+- **Security First** - Defense in depth approach
+- **Scalability** - Horizontal scaling ready
+- **Maintainability** - Clean code, documented patterns
+- **Performance** - Caching strategies, optimized queries
 
 ---
 
 ## 📖 How to Navigate
 
-Each project folder contains:
+Each project folder contains a project README with:
 
-- `architecture.md` - System architecture diagrams and explanations
-- `tech-stack.md` - Detailed technology choices and rationale
-- `features.md` - Key features and implementations
-- `challenges.md` - Technical challenges and solutions
+- Architecture overview and system boundaries
+- Tech stack and rationale
+- Core modules and data/control flow
+- Technical trade-offs and implementation notes
 
 Pattern documentation includes:
 
@@ -111,6 +119,8 @@ Pattern documentation includes:
 - **Production-Ready**: Deployed applications serving real users
 - **Security-Focused**: Custom implementations beyond standard libraries
 - **DevOps Skills**: Complete Docker setups with multi-service orchestration
+- **Runtime Design**: Deterministic contracts and continuity models for agent workflows
+- **Networking Systems**: Router-side protocol design, QoS/PPC flows, and RF channel recommendation strategies
 - **Problem Solver**: Documented real-world challenges and solutions
 
 ---
@@ -121,7 +131,7 @@ Interested in discussing these architectures or potential collaboration?
 
 - **GitHub**: [@Angeles-HO](https://github.com/Angeles-HO)
 - **Email**: [Angeles-HO](mailto:angelesho@pm.me)
-- **Profile**: [View Full Tech Stack](https://github.com/Angeles-HO)
+- **Profile**: [View Full Tech Stack](https://github.com/Angeles-HO/Angeles-HO)
 
 ---
 

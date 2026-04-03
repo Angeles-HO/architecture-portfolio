@@ -20,7 +20,8 @@ architecture-portfolio/
 ├── projects/                      # Project showcases
 │   ├── ecommerce-cosmetics/       # Full-stack e-commerce
 │   ├── digital-menu-qr/           # QR menu system
-│   └── data-sync-pipeline/        # Data synchronization
+│   ├── telvyn/                    # Local-first agent runtime
+│   └── kitsunping-network-stack/  # Android + router optimization architecture
 │
 └── patterns/                      # Reusable technical patterns
     ├── csrf-implementation.md     # Custom CSRF protection
@@ -109,7 +110,8 @@ Interested in working together? Check:
 | ----------------------- | ---------------------------------- | ---------------------------------------- |
 | **E-commerce Platform** | Node.js, PostgreSQL, Redis, Docker | Custom security, Cart system, Full-stack |
 | **Digital Menu (QR)**   | Node.js, PostgreSQL, Docker        | Cache strategy, Real-time updates        |
-| **Data Sync Pipeline**  | Python, JSON                       | Hash-based diff, Idempotent operations   |
+| **Telvyn Runtime**      | Python, CLI/TUI, local backends    | Deterministic I/O, session continuity    |
+| **Kitsunping Stack**    | Bash, Android root, router scripts | Event daemon, signed QoS protocol        |
 
 ---
 

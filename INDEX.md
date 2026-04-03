@@ -44,10 +44,32 @@ Quick reference to all documentation in this portfolio.
 
 **Read**: [projects/digital-menu-qr/README.md](projects/digital-menu-qr/README.md)
 
-### Data Sync Pipeline
+### Telvyn - Local-First Agent Runtime
 
-📁 Location: `projects/data-sync-pipeline/`  
-🚧 **Status**: To be documented
+📁 Location: `projects/telvyn/`
+
+| Section      | Description                                                    |
+| ------------ | -------------------------------------------------------------- |
+| Architecture | Conversation -> Session -> Run model with continuity pointers  |
+| Reliability  | Deterministic workspace I/O contract and bounded retry policy  |
+| Features     | Local-first execution, guarded workspace scope, i18n, TUI/CLI |
+| Tech Stack   | Python, local model backends, CLI/TUI                          |
+
+**Read**: [projects/telvyn/README.md](projects/telvyn/README.md)
+
+### Kitsunping Network Optimization Stack
+
+📁 Location: `projects/kitsunping-network-stack/`
+
+| Section      | Description                                                   |
+| ------------ | ------------------------------------------------------------- |
+| Architecture | Android on-device daemon + router-side policy/QoS contract    |
+| Protocol     | Signed pair/policy/heartbeat flow with state-driven behavior |
+| Features     | Dynamic profile switching, diagnostics, router integration    |
+| Maturity     | Implemented + experimental + in-progress + planned roadmap    |
+| Tech Stack   | Bash, Android root tooling, router shell scripts             |
+
+**Read**: [projects/kitsunping-network-stack/README.md](projects/kitsunping-network-stack/README.md)
 
 ---
 
@@ -120,10 +142,10 @@ Quick reference to all documentation in this portfolio.
 
 | Category           | Files | Total Lines |
 | ------------------ | ----- | ----------- |
-| Project READMEs    | 2     | ~1200       |
-| Technical Patterns | 5     | ~2000       |
-| Setup Guides       | 2     | ~400        |
-| **Total**          | **9** | **~3600**   |
+| Project READMEs    | 4     | Growing     |
+| Technical Patterns | 5     | Growing     |
+| Setup Guides       | 2     | Growing     |
+| **Total**          | **11** | **Growing** |
 
 ---
 
@@ -168,6 +190,14 @@ Recommended reading order:
 - [Digital Menu (QR)](projects/digital-menu-qr/README.md)
 - [CSRF Middleware](patterns/csrf-implementation.md)
 - [Rate Limiting](patterns/rate-limiting.md)
+
+**Python**
+
+- [Telvyn Runtime](projects/telvyn/README.md)
+
+**Bash / Shell**
+
+- [Kitsunping Network Stack](projects/kitsunping-network-stack/README.md)
 
 **PostgreSQL**
 
@@ -214,6 +244,8 @@ Recommended reading order:
 - [CSRF Implementation](patterns/csrf-implementation.md)
 - [E-commerce Architecture](projects/ecommerce-cosmetics/README.md)
 - [Multi-Service Docker](patterns/docker-compose-setup.md)
+- [Telvyn Runtime Model](projects/telvyn/README.md)
+- [Kitsunping Protocol Design](projects/kitsunping-network-stack/README.md)
 
 ---
 
