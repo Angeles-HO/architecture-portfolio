@@ -1,14 +1,23 @@
-# Telvyn - Local-First Agent Runtime
+# Telvyn - Runtime
 
-> A local-first technical agent runtime designed for traceable execution, deterministic workspace reads, and session continuity.
+> A local-first agent runtime for technical work: investigate code, execute controlled actions, and return traceable results with explicit workspace boundaries.
+
+---
+
+## Project Status
+
+- Latest published beta: `v0.2.3-beta`
+- Next release target: `v0.2.4-beta`
+- Current stabilization focus: exec-policy expansion, truthful telemetry, and operator cost visibility
+- Current emphasis: reliable technical execution instead of generic chat UX
 
 ---
 
 ## Why This Project Matters
 
-Telvyn addresses a common reliability gap in agent workflows: non-deterministic I/O behavior and weak continuity between runs.
+Telvyn - Runtime is built around a practical problem in agent systems: most assistants can sound capable, but many fail under real workspace constraints, weak tool policy, or poor traceability.
 
-The architecture separates planning from filesystem truth, enforcing deterministic contracts for workspace reads while preserving session-level context across executions.
+The runtime treats execution as an operator-controlled system rather than a loose chat loop. It separates intent routing, session continuity, workspace policy, and execution tracing so technical runs are inspectable and repeatable.
 
 ---
 
@@ -17,13 +26,13 @@ The architecture separates planning from filesystem truth, enforcing determinist
 ```mermaid
 graph TB
   User[User Task]
-  Router[Intent Router]
+  Router[Intent + Policy Routing]
   Session[Session Runtime]
   Executor[Execution Engine]
-  Tools[Tool Dispatch]
-  Workspace[(Workspace FS)]
-  Memory[(Session Memory)]
-  Trace[(Run Trace)]
+  Tools[Tool + Backend Layer]
+  Workspace[(Workspace Root)]
+  Memory[(Bounded Session Memory)]
+  Trace[(Run Trace + Telemetry)]
 
   User --> Router
   Router --> Session
@@ -40,29 +49,48 @@ graph TB
 
 ### Conversation -> Session -> Run
 
-- **Conversation**: logical grouping and recency metadata.
-- **Session**: mutable continuity state (workspace, pending actions, bounded memory).
-- **Run**: immutable trace of one execution.
+- **Conversation**: logical continuity across related work.
+- **Session**: mutable runtime state, active goals, pending actions, workspace binding, and bounded memory.
+- **Run**: immutable execution record with outputs, telemetry, and final result state.
 
-### Continuity Behavior
+### What the runtime preserves
 
-- Carries forward bounded context from previous runs.
-- Stores compact goals/facts/recent-actions memory deltas.
-- Handles explicit confirm/cancel flows through persisted pending actions.
+- bounded continuity between runs
+- explicit confirm/cancel state for risky actions
+- workspace and current-directory context
+- run traces that support debugging and regression analysis
 
 ---
 
-## Deterministic Workspace I/O Contract
+## Current Runtime Capabilities
 
-A key architectural decision is strict deterministic handling for workspace-read intent:
+- Deterministic workspace-read behavior for search/list/existence flows.
+- External workspace binding through absolute project roots with scoped `cwd` control.
+- Local-model and cloud-compatible backend support.
+- CLI and Textual TUI surfaces for the same execution runtime.
+- Cost visibility, compatibility validation, and prompt-optimization support for operators.
+- Structured execution telemetry instead of optimistic success reporting.
 
-- No model-in-the-loop for filesystem read outcomes.
-- In-workspace path resolution only.
-- Fixed retry budget.
-- Deterministic search/list/existence behavior.
-- Guardrails against path traversal and out-of-scope access.
+---
 
-This improves reliability, reproducibility, and safety for technical workflows.
+## Key Design Decisions
+
+### Deterministic workspace I/O
+
+Workspace reads are handled with contract-driven logic rather than letting the model improvise filesystem state.
+
+- No model-in-the-loop for read-path truth.
+- In-scope path resolution only.
+- Deterministic search/list/existence handling.
+- Guardrails against traversal and out-of-scope access.
+
+### Operator-first execution
+
+The runtime exposes execution constraints directly: sandbox mode, compatibility checks, workspace binding mode, and traceable tool behavior are treated as first-class operator controls.
+
+### Traceability over illusion
+
+Telvyn favors truthful telemetry and reproducible artifacts over polished but unverifiable answers. The intended outcome is a runtime that can be trusted during technical work, not just demoed.
 
 ---
 
@@ -70,31 +98,34 @@ This improves reliability, reproducibility, and safety for technical workflows.
 
 - **Language**: Python
 - **Interfaces**: CLI + Textual TUI
-- **Execution**: local-first runtime
-- **Backends**: Ollama and OpenAI-compatible providers
-- **Testing**: unittest suite for runtime and contract paths
+- **Runtime modes**: local-first with optional cloud-compatible providers
+- **Backends**: Ollama and OpenAI-compatible tool-capable providers
+- **Testing**: runtime, pricing, TUI/CLI parity, and contract-oriented validation
 
 ---
 
 ## Design Highlights
 
-- Local-first execution model without mandatory cloud dependency.
-- Scope-safe workspace operations.
-- Clear separation between mutable session state and immutable run traces.
-- Structured memory with bounded growth and continuity rules.
-- Contract-driven deterministic I/O for read paths.
+- Local-first by default, without mandatory cloud dependence.
+- Scope-safe workspace operations with bind-mode controls.
+- Clear split between mutable session state and immutable run traces.
+- Bounded memory and continuity instead of unbounded chat history.
+- Cost-aware and compatibility-aware execution flow.
+- Practical support for technical tasks that mix reading, explanation, and controlled edits.
 
 ---
 
-## References
+## Public References
 
-- Runtime architecture: https://github.com/Angeles-HO/Telvyn/blob/main/docs/ARCHITECTURE.md
+- Runtime overview: https://github.com/Angeles-HO/Telvyn/blob/main/README.md
+- Architecture: https://github.com/Angeles-HO/Telvyn/blob/main/docs/ARCHITECTURE.md
 - Session model: https://github.com/Angeles-HO/Telvyn/blob/main/docs/CONVERSATION_SESSION_RUNTIME_MODEL.md
-- Deterministic I/O contract: https://github.com/Angeles-HO/Telvyn/blob/main/docs/DETERMINISTIC_WORKSPACE_IO_CONTRACT.md
+- Deterministic workspace I/O contract: https://github.com/Angeles-HO/Telvyn/blob/main/docs/DETERMINISTIC_WORKSPACE_IO_CONTRACT.md
 - Memory model: https://github.com/Angeles-HO/Telvyn/blob/main/docs/MEMORY_MODEL.md
+- TUI and CLI capabilities: https://github.com/Angeles-HO/Telvyn/blob/main/docs/README_TUI_CLI_CAPABILITIES.md
 
 ---
 
 ## Portfolio Note
 
-This document summarizes architecture decisions and technical boundaries for portfolio and interview discussion. It does not expose internal private implementation details beyond already-public repository documentation.
+This summary is intentionally portfolio-oriented. It describes public architecture, current runtime direction, and operator-facing design choices without exposing private implementation details beyond the public repository.
