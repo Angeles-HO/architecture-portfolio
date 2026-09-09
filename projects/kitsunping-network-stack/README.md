@@ -1,14 +1,19 @@
-# Kitsunping Network Optimization Stack
+# Kitsunping Network Runtime Stack
 
-> Android network optimization architecture combining on-device profile orchestration with router-side policy control.
+> A rooted-Android network profile module with a bounded Rust observation sidecar and an optional, protocol-level router integration.
 
 ---
 
 ## Why This Project Matters
 
-Kitsunping tackles unstable mobile gaming/network conditions through adaptive profile execution on Android, while optionally integrating with a router-side policy engine for coordinated QoS behavior.
+Kitsunping collects local connectivity state and applies explicitly configured
+network profiles on rooted Android devices. Its runtime is deliberately hybrid:
+Shell owns policy and device mutation, while `kitsunpingd` provides a narrow,
+read-only Rust-first discovery contract with strict Shell fallback.
 
-The stack is built around event-driven orchestration, signed protocol requests, and clear module boundaries between phone and router responsibilities.
+The module can exchange status and channel-request data with a compatible router
+agent. Router implementation and deployment remain separate from this module;
+the boundary is documented HTTP/JSON interoperability, not shared runtime code.
 
 ---
 
@@ -16,126 +21,184 @@ The stack is built around event-driven orchestration, signed protocol requests, 
 
 ```mermaid
 graph LR
-  App[Android App or Trigger]
-  Module[Phone Module Daemon]
-  Profiles[Profile Executor]
-  RouterAPI[Router Policy API]
-  RouterAgent[Router Agent]
-  Runtime[(Runtime State)]
+  Trigger[User Action or App]
+  Service[Magisk service.sh]
+  Shell[Shell daemon and policy runtime]
+  Native[kitsunpingd read-only sidecar]
+  State[(cache and local logs)]
+  Profiles[Profile and calibration executors]
+  RouterClient[HTTP/JSON router client]
+  RouterAgent[Compatible router agent]
 
-  App --> Module
-  Module --> Profiles
-  Module --> Runtime
-  Module -->|pair/policy/heartbeat| RouterAPI
-  RouterAPI --> RouterAgent
+  Trigger --> Service
+  Service --> Shell
+  Service --> Native
+  Native -->|network.discovery/v1| State
+  State --> Shell
+  Shell --> Profiles
+  Shell --> State
+  Shell --> RouterClient
+  RouterClient --> RouterAgent
 ```
 
 ---
 
 ## Core Components
 
-### On-device Module (Kitsunping)
+### Android Magisk Module
 
-- Event-driven daemon loop for connectivity and profile events.
-- Profile application modes (for example: `gaming`, `speed`, `stable`, `benchmark_speed`, `benchmark_latency`).
-- Local diagnostics and cache/log artifacts.
-- Router protocol client integration through documented HTTP/JSON endpoints.
+- `installer/service.sh` starts separate Shell and native supervisors during the
+  late service phase.
+- The Shell runtime owns profiles, calibration, properties, router calls, and
+  all network mutation.
+- `kitsunpingd` writes atomic local state, discovers interfaces, routes, link
+  state, and selected Wi-Fi/mobile metadata.
+- `network.discovery/v1` uses Rust first only for validated discovery fields;
+  stale, invalid, unavailable, or incomplete data triggers the legacy Shell
+  collector.
+- Local cache and logs provide diagnostics without background uploads.
 
-### Router-side Module (KitsunpingRouter)
+### Native Sidecar: kitsunpingd
 
-- Policy contract engine for pair/policy/heartbeat lifecycle.
-- Signed request validation and replay-protection behavior.
-- Runtime state transitions and operational status inspection.
-- Channel recommendation/apply endpoints and QoS-oriented scripts.
-- DFS-based policy evaluation with guardrails for safe operation.
+- Rust, Bionic-compatible AArch64 binary under `bin/kitsunpingd`.
+- Read-only sources include `NETLINK_ROUTE`, procfs, sysfs, and bounded command
+  backends for Android framework data not exposed by those sources.
+- Single-instance PID/lock lifecycle, atomic state publication, interval-based
+  collection, and cooperative signal shutdown.
+- Experimental sources remain opt-in. They do not gain policy authority merely
+  by being published.
+
+### Router Boundary
+
+- Kitsunping contains only the Android-side client for documented event,
+  recommendation, and channel-apply requests.
+- Compatible router agents, including KitsunpingRouter, are independent
+  distributions with their own deployment and operational boundaries.
+- Router-side QoS, Packet Priority Coloring (PPC), queueing, and channel logic
+  are not bundled into the Android module payload.
 
 ---
 
 ## Security and Reliability Boundaries
 
-- Explicit client/router integration boundary.
-- Signed protocol flow for policy operations.
-- Runtime state-machine orientation (pair -> policy -> heartbeat -> revoke/sweep).
-- Operational safety guidance to avoid destructive manual sequencing.
+- Explicit module/router protocol and licensing boundary.
+- Rust observation cannot silently alter profiles, properties, calibration,
+  router state, or network settings.
+- Atomic state files, PID/lock ownership, bounded restart behavior, and strict
+  fallback protect ordinary runtime operation.
+- Device, router, and release validation are separate gates; a local build or
+  state file is not treated as deployment evidence.
 
 ---
 
 ## Tech Stack
 
-- **Languages**: Bash/Shell scripting
-- **Platform**: Rooted Android + Router shell environment
-- **Interfaces**: HTTP/JSON endpoints + CLI scripts
-- **Operational model**: Event-driven daemon + stateful router policy runtime
+- **Languages**: POSIX-oriented Shell and Rust
+- **Platform**: Rooted Android with Magisk-compatible module lifecycle
+- **Native interfaces**: Bionic, `NETLINK_ROUTE`, procfs, sysfs, and optional
+  Android command backends
+- **Integration interfaces**: Documented HTTP/JSON client calls to compatible
+  router agents
+- **Operational model**: Shell policy runtime plus a narrow Rust observation
+  sidecar
 
 ---
 
 ## Design Highlights
 
-- Separation between phone-side optimization and router-side enforcement.
-- Contract-first policy protocol with explicit command lifecycle.
-- Practical diagnostics and deploy scripts for real operational environments.
-- Focus on reproducible behavior under variable network conditions.
+- A bounded Rust-first `network.discovery/v1` contract instead of a broad
+  rewrite of Shell responsibilities.
+- Read-only native state collection with reactive Shell fallback.
+- Backward-compatible line-oriented state bridge between the sidecar and Shell
+  consumers.
+- Separate authority boundaries for observation, policy, router integration,
+  and mutation.
 
 ---
 
-## Networking Topics Covered (Router-Focused)
+## Networking Topics
 
-- Per-device QoS policy orchestration by `client_mac` identity.
-- Signed API contract for `pair`, `policy`, and `heartbeat` operations.
-- Anti-replay controls (`seq`, `nonce`, timestamp validation, signature checks).
-- Packet marking and local traffic prioritization through Packet Priority Coloring (PPC).
-- Queueing and pacing architecture (`nft` marking + `tc`/HTB integration path).
-- Channel recommendation logic for 2.4 GHz/5 GHz with RF-aware scoring.
-- Driver-aware scan fallbacks (including MediaTek-specific survey paths).
-- Router/phone state synchronization, diagnostics, and controlled recovery flows.
-
----
-
-## Existing Capabilities (Implemented)
-
-- End-to-end policy protocol lifecycle with runtime states (`PAIRED_IDLE`, `ACTIVE_POLICY`, `EXPIRED`, `REVOKED`).
-- Signed request validation and replay protection in router-side processing.
-- PPC layer with class-based packet marking and runtime telemetry fields.
-- Router diagnostics and deployment workflows for real OpenWrt-like environments.
-- Read-only channel recommendation endpoint and JSON contract for app/module integration.
+- Active interface, route, link, and IPv4 discovery through native Linux
+  sources with Shell compatibility fallback.
+- Wi-Fi metadata collection through ordered `iw`, `wpa_cli`, and `dumpsys`
+  adapters; direct `nl80211` remains an evaluated future backend.
+- Mobile metadata, calibration, profile application, and Android property work
+  remain Shell-owned until independently validated.
+- Optional router event and channel coordination through documented endpoints.
+- Router-side Packet Priority Coloring (PPC), queueing, and RF/channel work are
+  presented as separate compatible-system capabilities.
 
 ---
 
-## Experimental Features
+## Implemented Capabilities
 
-- Extended channel recommendation model for 2.4 GHz `full_1_13` candidates.
-- RF scoring refinements: overlap weights, co-channel penalty, max-based normalization.
-- Width/confidence inference and richer RF debug payloads.
-- AP-driver constrained scan strategies with degraded-mode fallback.
-
----
-
-## Currently Being Improved
-
-- QoS consistency during `sweep`/`revoke` cleanup paths.
-- Router docs modularization and duplicate-doc deprecation cleanup.
-- Router agent internal modular split (`scripts/lib/*`) to reduce operational risk.
-- Better operator clarity between safe daily commands and advanced diagnostic commands.
+- Magisk late-service launch with separate Shell and native supervisors.
+- Rust-first network discovery for validated interface, Wi-Fi/mobile link, IPv4,
+  and default-route fields.
+- Bionic AArch64 `kitsunpingd` lifecycle with atomic state snapshots and local
+  capability diagnostics.
+- Shell-owned `speed`, `stable`, and `gaming` profile execution, calibration,
+  state handling, and recovery behavior.
+- Client-side router event, recommendation, and channel-apply integration.
 
 ---
 
-## Planned Roadmap (Networking)
+## Experimental And Gated Work
 
-- Stronger QoS scheduling maturity with explicit `tc`/HTB class consumption from marks.
-- Safer and clearer channel-apply flow with explicit user confirmation gates.
-- Additional hardening around deployment reproducibility and rollback behavior.
-- More comparative RF validation against external analyzer tools for recommendation trust.
-- Expanded observability for policy drift, replay rejection causes, and runtime health.
+- Foreground-package cpuset source with a strict `dumpsys` fallback; it remains
+  opt-in and is not the default runtime source.
+- Direct Rust `nl80211` Wi-Fi acquisition, pending service-context SELinux and
+  device-parity validation.
+- Real ONNX inference, planned as opt-in observation only with ABI, battery,
+  thermal, rollback, and output-validation gates.
+- Extended router RF/channel capabilities, evaluated within the separate router
+  distribution.
+
+---
+
+## Current Direction
+
+- `v7.0.1`: complete stable validation of the module and approved native sidecar.
+- `v7.0.2`: hardening and controlled packet-analysis work.
+- `v7.0.3`: real ONNX integration only after the documented safety gates pass.
+- Native backend work remains evidence-led: prototype, host checks, device
+  parity, bounded rollout, and rollback before promotion.
+
+---
+
+## Repository Structure
+
+```text
+Kitsunping/
+  installer/       Magisk lifecycle hooks and supervisors
+  addon/           Shell daemon helpers, bundled command tools, policy adapters
+  bin/             Packaged native sidecars (`kitsunpingd`, inference scaffold)
+  network/         Shell cycles for app, Wi-Fi, and mobile surfaces
+  policy/          Shell policy engine, execution, and profile selection
+  net_profiles/    Profile definitions and device-tuning inputs
+  calibration/     Calibration implementation and data
+  Docs/            Runtime contracts, scope, safety, and release documentation
+  testing/         Shell/runtime fixtures and integration scenarios
+  tools/           Local validation and release-gate commands
+
+Kitsunpingd/
+  src/             Rust sidecar, contracts, acquisition, backends, providers
+  tests/           Public sidecar contract checks
+  tools/           Android/Bionic build helper
+```
 
 ---
 
 ## References
 
 - Module overview: https://github.com/Angeles-HO/kitsunping
-- Router-side protocol docs: available in dedicated router documentation set (shared during technical review)
+- Runtime contract: `Kitsunping/Docs/10-runtime/kitsunping-kitsunpingd-contract.md`
+- Router integration boundary: `Kitsunping/Docs/20-router/router-integration-boundary.md`
 
 ---
 
 ## Portfolio Note
 
-This page documents architecture-level decisions and system boundaries for professional review. It avoids exposing sensitive environment-specific details while preserving technical depth.
+This page documents architecture-level decisions and system boundaries for
+professional review. It intentionally omits environment-specific credentials,
+device identifiers, private router topology, and unpublished release claims.
